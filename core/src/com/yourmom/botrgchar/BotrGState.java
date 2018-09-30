@@ -34,6 +34,8 @@ public enum BotrGState {
                 return "<ATTNAME> got damaged by Poison!";
             case LEGO:
                 return "<ATTNAME> got hurt while stepping on a Lego Brick!";
+            case BLEED:
+                return "<ATTNAME> bleeds!";
         }
     }
 
