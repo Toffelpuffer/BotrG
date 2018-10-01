@@ -7,13 +7,13 @@ import com.yourmom.screenassets.BotrGSceneBattle;
  * Created by Ben on 9/27/2018.
  */
 
-public class AnimStateInflictPoison extends BotrGAnimation {
+public class AnimStatePoisonInflict extends BotrGAnimation {
     private boolean animActive;
     private int frameCnt;
     private int delay;
     private final int ANIM_LENGTH = 10;
 
-    public AnimStateInflictPoison(){
+    public AnimStatePoisonInflict(){
         animActive = false;
         frameCnt = 0;
         delay = 0;
@@ -31,7 +31,7 @@ public class AnimStateInflictPoison extends BotrGAnimation {
 
         if(animActive && frameCnt >= 0){
 
-
+        //TODO: add StateInflictPoison animation
 
             frameCnt++;
         } else

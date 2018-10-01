@@ -84,6 +84,7 @@ public class BotrGStatus {
         printStates(states, stateValues);
     }
 
+    //TODO: find reason for crash (multiple states from same type?)
     private void printStates(BotrGState[] states, float[][] stateValues){
         for(int i = 0; i < states.length; i++){
             System.out.print("STATUS:  State: " + states[i] + " Values: ");

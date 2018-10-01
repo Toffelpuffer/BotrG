@@ -121,4 +121,10 @@ public class BotrGGuiBattle {
         arrow = new BotrGTile(screenWidth * .91f, screenHeight * .265f, BotrGSpriteArchive.getSprite(9006), (int)(screenWidth * .0531f), (int)(screenWidth * .0338f), CenterType.DEFAULT);
         arrow.setAlpha(0.0f);
     }
+
+    /**
+     * TODO: make Gui appearance changeable
+     * public void setGuiSkin(){}
+     */
+
 }

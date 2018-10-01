@@ -231,6 +231,7 @@ public class BotrGEventAttack implements BotrGEvent {
             }
         }
 
+        //TODO: make an existing state not receivable
         if(currentEventState == eventState.INFLICT_STATE){
             if(eventStateChanging){
                 eventStateChanging = false;
@@ -271,6 +272,7 @@ public class BotrGEventAttack implements BotrGEvent {
             }
         }
 
+        //TODO: make INFLICT_SELF_STATE work
         if(currentEventState == eventState.INFLICT_SELF_STATE){
             if(eventStateChanging){
                 eventStateChanging = false;

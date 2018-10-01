@@ -10,6 +10,7 @@ public final class AttackArchive {
 
     public static Attack getAttack(int attackId){
         switch(attackId){
+            //TODO: create new attacks...
             case 0: return new Attack("", "", "", "",0,
                     new Attack.BotrGAttackAttribute[] {}, new float[][] {},
                     EleType.NORMAL);

@@ -31,7 +31,7 @@ public class AnimStatePoisonDmg extends BotrGAnimation {
 
         if(animActive && frameCnt >= 0){
 
-
+        //TODO: add StatePoisonDmg animation
 
             frameCnt++;
         } else

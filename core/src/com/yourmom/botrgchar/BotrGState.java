@@ -2,7 +2,7 @@ package com.yourmom.botrgchar;
 
 import com.yourmom.animation.BotrGAnimation;
 import com.yourmom.animation.attacks.AnimHit;
-import com.yourmom.animation.states.AnimStateInflictPoison;
+import com.yourmom.animation.states.AnimStatePoisonInflict;
 import com.yourmom.screenassets.BotrGChar;
 import com.yourmom.screenassets.BotrGSceneBattle;
 
@@ -25,6 +25,7 @@ public enum BotrGState {
     EVA_UP,
     EVA_DOWN;
 
+    //TODO: add remaining state messages and functionality
 
     public static String getStateDmgText(BotrGState state) {
         switch (state) {
@@ -95,7 +96,7 @@ public enum BotrGState {
             BotrGSceneBattle battleScene, BotrGState state, boolean harmedCharIsPlayer) {
         switch(state){
             default: return AttackAnimationArchive.getAttackAnimation(0);
-            case POISON: return new AnimStateInflictPoison(/*battleScene, harmedCharIsPlayer*/);
+            case POISON: return new AnimStatePoisonInflict(/*battleScene, harmedCharIsPlayer*/);
         }
     }
 

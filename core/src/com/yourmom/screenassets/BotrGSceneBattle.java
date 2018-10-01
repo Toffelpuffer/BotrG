@@ -6,7 +6,7 @@ import com.yourmom.botrgchar.BotrGState;
 import static com.yourmom.game.BotrGStyle.screenHeight;
 import static com.yourmom.game.BotrGStyle.screenWidth;
 
-/**The scene in which the player fights his enemys.
+/**The scene in which the active player character fights an enemy.
  * Created by Ben on 11.07.2018.
  */
 
