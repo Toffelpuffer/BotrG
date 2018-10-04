@@ -16,10 +16,7 @@ public class AnimHit extends BotrGAnimation {
 
     private boolean harmedCharIsPlayer;
     private int state;
-    private double speed;
-    private int reduceFrames = 30;
-    private double finalWidthPerc;
-    private double currentWidthPerc;
+    private AnimReduceHpBar animReduceHpBar;
 
     public AnimHit(BotrGSceneBattle battleScene, int dealtDmg, float newSpeed, boolean harmedCharIsPlayer){
         animActive = false;
@@ -28,20 +25,7 @@ public class AnimHit extends BotrGAnimation {
 
         this.harmedCharIsPlayer = harmedCharIsPlayer;
 
-        if(newSpeed == 0){
-            speed = (double)dealtDmg / (reduceFrames * battleScene.getChar(this.harmedCharIsPlayer).getBaseHp());
-            System.out.println("ANIM_HIT: Speed: " + speed + " DealtDmg: " + dealtDmg + " ReduceFrames: " + reduceFrames + " currentHp: " + battleScene.getDefendingChar().getHp());
-
-        } else {
-            speed = (newSpeed / 100);
-        }
-
-        finalWidthPerc = (double)(battleScene.getChar(this.harmedCharIsPlayer).getHp() - dealtDmg) / battleScene.getChar(this.harmedCharIsPlayer).getBaseHp();
-        if(finalWidthPerc < 0) finalWidthPerc = 0.0d;
-        System.out.println("ANIM_HIT: finalWidthPerc: " + finalWidthPerc);
-
-        currentWidthPerc = (double)battleScene.getChar(this.harmedCharIsPlayer).getHp() / battleScene.getChar(this.harmedCharIsPlayer).getBaseHp();
-        System.out.println("ANIM_HIT: currentWidthPerc: " + currentWidthPerc);
+        animReduceHpBar = new AnimReduceHpBar(battleScene, dealtDmg, newSpeed, harmedCharIsPlayer);
     }
 
     @Override
@@ -50,6 +34,7 @@ public class AnimHit extends BotrGAnimation {
         frameCnt = -delay;
         state = 0;
         System.out.println("ANIM_HIT: HitAnim started!");
+        animReduceHpBar.startAnimation(battleScene);
     }
 
     @Override
@@ -65,16 +50,8 @@ public class AnimHit extends BotrGAnimation {
         }
 
         if(animActive && state == 1){
-            if(currentWidthPerc - speed > finalWidthPerc){
-
-                currentWidthPerc -= speed;
-
-                if(harmedCharIsPlayer) battleScene.getGui().hpBoxes.setPlayerHpBarLength(currentWidthPerc);
-                else battleScene.getGui().hpBoxes.setEnemyHpBarLength(currentWidthPerc);
-            }
-            if(currentWidthPerc - speed <= finalWidthPerc) {
-                if(harmedCharIsPlayer) battleScene.getGui().hpBoxes.setPlayerHpBarLength(finalWidthPerc);
-                else battleScene.getGui().hpBoxes.setEnemyHpBarLength(finalWidthPerc);
+            animReduceHpBar.updateAnimation(battleScene);
+            if(!animReduceHpBar.isActive()){
                 endAnimation(battleScene);
             }
         }
