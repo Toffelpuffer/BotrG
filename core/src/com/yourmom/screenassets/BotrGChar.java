@@ -105,6 +105,8 @@ public class BotrGChar{
     }
 
     public void setPos(float x, float y){charTile.setPos(x, y);}
+    public void setXPos(float x){charTile.setX(x);}
+    public void setYPos(float y){charTile.setY(y);}
     public void resetPos(BotrGStage stage){
         if(isPlayer) charTile.setPos(stage.getPlayerX(), stage.getPlayerY());
         else charTile.setPos(stage.getEnemyX(), stage.getEnemyY());
