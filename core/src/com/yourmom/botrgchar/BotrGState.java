@@ -2,6 +2,7 @@ package com.yourmom.botrgchar;
 
 import com.yourmom.animation.BotrGAnimation;
 import com.yourmom.animation.attacks.AnimHit;
+import com.yourmom.animation.states.AnimStatePoisonDmg;
 import com.yourmom.animation.states.AnimStatePoisonInflict;
 import com.yourmom.screenassets.BotrGChar;
 import com.yourmom.screenassets.BotrGSceneBattle;
@@ -88,7 +89,7 @@ public enum BotrGState {
             BotrGSceneBattle battleScene, BotrGState state, int dmg, boolean harmedCharIsPlayer){
         switch(state){
             default: return new AnimHit(battleScene, dmg, 0, harmedCharIsPlayer);
-            case POISON: return new AnimHit(battleScene, dmg, 0, harmedCharIsPlayer);
+            case POISON: return new AnimStatePoisonDmg(harmedCharIsPlayer);
         }
     }
 
