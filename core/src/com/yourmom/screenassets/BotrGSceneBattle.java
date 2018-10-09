@@ -2,6 +2,7 @@ package com.yourmom.screenassets;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.yourmom.botrgchar.BotrGState;
+import com.yourmom.botrgchar.BotrGStateType;
 
 import static com.yourmom.game.BotrGStyle.screenHeight;
 import static com.yourmom.game.BotrGStyle.screenWidth;
@@ -44,7 +45,7 @@ public class BotrGSceneBattle {
         this.enemyChar.setAttack(0, 1);
         this.enemyChar.setAttack(1, 2);
 
-        this.playerChar.addState(BotrGState.POISON, new float[]{2.0f, 30.0f});
+        this.playerChar.addState(new BotrGState(BotrGStateType.POISON, new float[]{2.0f, 30.0f}));
         //this.playerChar.addState(BotrGState.LEGO, new float[]{1.0f, 0.5f, 20.0f, 0.0f});
 
         //this.enemyChar.addState(BotrGState.LEGO, new float[]{1.0f, 1.0f, 20.0f, 0.0f});
