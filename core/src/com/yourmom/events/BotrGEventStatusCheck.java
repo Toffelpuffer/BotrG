@@ -91,13 +91,13 @@ public class BotrGEventStatusCheck implements BotrGEvent {
     private void setStatusDialogues(BotrGSceneBattle battleScene){
         for(int i = 0; i < battleScene.getAttackingChar().getStates().length; i++){
             if(BotrGState.hasStatusCheckMsg(battleScene.getAttackingChar().getStates()[i])){
-                if(battleScene.getAttackingChar().getStateValues()[i][0] > 0)
+                if(battleScene.getAttackingChar().getStates()[i].getValues()[0] > 0)
                     addDialogue(new BotrGDialogue(
                             BotrGTextConvertor.replaceTags(
                                     getStateActiveText(battleScene.getAttackingChar().getStates()[i]), battleScene)
                             )
                     );
-                else if(battleScene.getAttackingChar().getStateValues()[i][0] == 0){
+                else if(battleScene.getAttackingChar().getStates()[i].getValues()[0] == 0){
                     addDialogue(new BotrGDialogue(
                             BotrGTextConvertor.replaceTags(
                                     getStateOverText(battleScene.getAttackingChar().getStates()[i]), battleScene)
@@ -129,7 +129,7 @@ public class BotrGEventStatusCheck implements BotrGEvent {
 
         for(int i= 0; i < character.getStates().length; i++)
             if(interrupts(character.getStates()[i])
-                    && Math.random() < character.getStateValues()[i][1]){
+                    && Math.random() < character.getStates()[i].getValues()[1]){
 
                 System.out.println("EVENT_STATUS_CHECK: activated interruption: " + character.getStates()[i]);
                 attackInterrupted = true;
