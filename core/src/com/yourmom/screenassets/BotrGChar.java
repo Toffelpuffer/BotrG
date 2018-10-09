@@ -31,7 +31,6 @@ public class BotrGChar{
     private Attack[] attacks;
     private boolean isPlayer;
 
-
     /**
      *
      * @param x x position
@@ -100,9 +99,6 @@ public class BotrGChar{
     public BotrGState[] getStates(){
         return status.getStates();
     }
-    public float[][] getStateValues(){
-        return status.getStateValues();
-    }
 
     public void setPos(float x, float y){charTile.setPos(x, y);}
     public void setXPos(float x){charTile.setX(x);}
@@ -144,8 +140,8 @@ public class BotrGChar{
         elements = status.getModifiedElements(baseBody.getCharElements());
     }
 
-    public void addState(BotrGState state, float[] values){
-        status.addState(state, values);
+    public void addState(BotrGState state){
+        status.addState(state);
     }
     public void removeState(BotrGState state){
         status.removeState(state);
