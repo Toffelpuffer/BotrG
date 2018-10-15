@@ -58,7 +58,6 @@ public class AnimReduceHpBar extends BotrGAnimation {
     public void updateAnimation(BotrGSceneBattle battleScene) {
         if(frameCnt == anim_length) endAnimation(battleScene);
 
-        //TODO: split into its own animation class
         if(animActive){
             if(currentWidthPerc - speed > finalWidthPerc){
 
