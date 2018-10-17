@@ -17,14 +17,13 @@ public class BotrGStatus {
     private BotrGModifier[] mods;
     private float[] modValues;
     private BotrGState[] states;
-    private float[][] stateValues;
+    //private float[][] stateValues;
 
 
     public BotrGStatus(){
         mods = new BotrGModifier[0];
         modValues = new float[0];
         states = new BotrGState[0];
-        stateValues = new float[0][];
     }
 
     public void addModifier(BotrGModifier newMod, float newModValue){
@@ -49,47 +48,39 @@ public class BotrGStatus {
         }
     }
 
-    public void addState(BotrGState newState, float[] stateValue){
+    public void addState(BotrGState newState){
         BotrGState[] newStates = new BotrGState[states.length + 1];
-        float[][] newStateValues = new float[stateValues.length + 1][];
 
         System.arraycopy(states, 0, newStates, 0, states.length);
         newStates[states.length] = newState;
-        System.arraycopy(stateValues, 0, newStateValues, 0, stateValues.length);
-        newStateValues[stateValues.length] = stateValue;
 
         states = newStates;
-        stateValues = newStateValues;
 
         System.out.println("STATUS: State '" + newState + "' Added! New States:");
-        printStates(states, stateValues);
+        printStates(states);
     }
 
     public void removeState(BotrGState state){
         BotrGState[] newStates = new BotrGState[states.length - 1];
-        float[][] newStateValues = new float[stateValues.length - 1][];
         int currentState = 0;
         for(int i = 0; i < states.length; i++){
             if(states[i] != state){
                 newStates[currentState] = states[i];
-                newStateValues[currentState] = stateValues[i];
                 currentState++;
             }
         }
 
         states = newStates;
-        stateValues = newStateValues;
 
-        System.out.println("STATUS: State '" + state + "' Removed! New States:");
-        printStates(states, stateValues);
+        System.out.println("STATUS: State '" + state + "' Removed! New active States:");
+        printStates(states);
     }
 
-    //TODO: find reason for crash (multiple states from same type?)
-    private void printStates(BotrGState[] states, float[][] stateValues){
-        for(int i = 0; i < states.length; i++){
-            System.out.print("STATUS:  State: " + states[i] + " Values: ");
-            for(int j = 0; j < stateValues[i].length; j++){
-                System.out.print(stateValues[i][j] + " ");
+    private void printStates(BotrGState[] states){
+        for (BotrGState state : states) {
+            System.out.print("STATUS:  State: " + state + " Values: ");
+            for (int j = 0; j < state.getValues().length; j++) {
+                System.out.print(state.getValues()[j] + " ");
             }
             System.out.println("");
         }
@@ -108,9 +99,6 @@ public class BotrGStatus {
     }
     public BotrGState[] getStates() {
         return states;
-    }
-    public float[][] getStateValues() {
-        return stateValues;
     }
 
     public int getMaxHp(int baseHealth) {
@@ -156,7 +144,11 @@ public class BotrGStatus {
         return dmgPerc;
     }
 
-
+    /**
+     *
+     * @param baseBodyElements
+     * @return an Element array
+     */
     public Element[] getModifiedElements(Element[] baseBodyElements){
         Element[] finalElements = baseBodyElements;
 
