@@ -1,6 +1,5 @@
 package com.yourmom.animation.attacks;
 
-import com.badlogic.gdx.Gdx;
 import com.yourmom.animation.BotrGAnimation;
 import com.yourmom.screenassets.BotrGSceneBattle;
 
@@ -12,7 +11,7 @@ public class AnimReduceHpBar extends BotrGAnimation {
     private boolean animActive;
     private int frameCnt;
     private int delay;
-    private int anim_length;
+    private final int ANIM_LENGTH;
 
     private boolean harmedCharIsPlayer;
     private double speed;
@@ -38,12 +37,12 @@ public class AnimReduceHpBar extends BotrGAnimation {
         if(newSpeed == 0){
             speed = (double)dealtDmg / (reduceFrames * battleScene.getChar(this.harmedCharIsPlayer).getBaseHp());
             System.out.println("ANIM_RED_HPBAR: Speed: " + speed + " DealtDmg: " + dealtDmg + " ReduceFrames: " + reduceFrames + " currentHp: " + battleScene.getDefendingChar().getHp());
-            anim_length = reduceFrames + 1;
+            ANIM_LENGTH = reduceFrames + 1;
 
         } else {
             speed = (newSpeed / 100);
 
-            anim_length = (int)(finalWidthPerc / speed) + 1;
+            ANIM_LENGTH = (int)(finalWidthPerc / speed) + 1;
         }
     }
 
@@ -56,7 +55,7 @@ public class AnimReduceHpBar extends BotrGAnimation {
 
     @Override
     public void updateAnimation(BotrGSceneBattle battleScene) {
-        if(frameCnt == anim_length) endAnimation(battleScene);
+        if(frameCnt == ANIM_LENGTH) endAnimation(battleScene);
 
         if(animActive){
             if(currentWidthPerc - speed > finalWidthPerc){
@@ -92,5 +91,9 @@ public class AnimReduceHpBar extends BotrGAnimation {
     @Override
     public void setDelay(int delayedFrames) {
         delay = delayedFrames;
+    }
+
+    public int getANIM_LENGTH(){
+        return ANIM_LENGTH;
     }
 }
