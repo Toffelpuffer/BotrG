@@ -1,6 +1,7 @@
 package com.yourmom.animation.states;
 
 import com.yourmom.animation.BotrGAnimation;
+import com.yourmom.animation.attacks.AnimReduceHpBar;
 import com.yourmom.screenassets.BotrGSceneBattle;
 
 import static com.yourmom.game.BotrGStyle.screenWidth;
@@ -14,20 +15,26 @@ public class AnimStatePoisonDmg extends BotrGAnimation {
     private int frameCnt;
     private int delay;
     private boolean isPlayer;
+    private AnimReduceHpBar animRedHp;
 
-    private final float MOVELENGTH = (20.0f / 1440.0f) * screenWidth;
+    private final float MOVELENGTH = (15.0f / 1440.0f) * screenWidth;
     private final int MOVEFRAMES = 3;
-    private final float COLOR_FRAMES = (MOVEFRAMES * 6) / 2;
+    private final int SHAKE_LENGTH = MOVEFRAMES * 6;
+    private final float COLOR_FRAMES = (SHAKE_LENGTH) / 2;
     private final float[] FINAL_COLOR = {85.0f / 255.0f, 26.0f / 255.0f, 139.0f / 255.0f}; //85,26,139
     private float[] currentColor;
-    private final int ANIM_LENGTH = MOVEFRAMES * 6;
+    private final int ANIM_LENGTH;
 
-    public AnimStatePoisonDmg(boolean playAnimOnPlayer){
+    public AnimStatePoisonDmg(BotrGSceneBattle battleScene, int dealtDmg, boolean playAnimOnPlayer){
         animActive = false;
         frameCnt = 0;
         delay = 0;
         isPlayer = playAnimOnPlayer;
         currentColor = new float[]{1.0f, 1.0f, 1.0f};
+
+        animRedHp = new AnimReduceHpBar(battleScene, dealtDmg, 0, playAnimOnPlayer);
+
+        ANIM_LENGTH = SHAKE_LENGTH + animRedHp.getANIM_LENGTH();
     }
 
     @Override
@@ -60,7 +67,7 @@ public class AnimStatePoisonDmg extends BotrGAnimation {
                 for(int i = 0; i < currentColor.length; i++)
                     currentColor[i] -= (1.0f - FINAL_COLOR[i]) / COLOR_FRAMES;
             }
-            if(frameCnt >= COLOR_FRAMES){
+            if(frameCnt >= COLOR_FRAMES && frameCnt < SHAKE_LENGTH){
                 for(int i = 0; i < currentColor.length; i++)
                     currentColor[i] += (1.0f - FINAL_COLOR[i]) / COLOR_FRAMES;
             }
@@ -71,6 +78,14 @@ public class AnimStatePoisonDmg extends BotrGAnimation {
                     currentColor[2],
                     1.0f
                 );
+
+            if(frameCnt >= SHAKE_LENGTH){
+                if(frameCnt == SHAKE_LENGTH) animRedHp.startAnimation(battleScene);
+
+                animRedHp.updateAnimation(battleScene);
+
+                //if(!animRedHp.isActive()) endAnimation(battleScene);
+            }
 
             frameCnt++;
         } else
