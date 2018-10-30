@@ -4,13 +4,14 @@ import com.yourmom.animation.AnimText;
 import com.yourmom.animation.AnimTextArrow;
 import com.yourmom.animation.BotrGAnimation;
 import com.yourmom.animation.attacks.AnimHit;
-import com.yourmom.botrgchar.Attack;
 import com.yourmom.botrgchar.AttackAnimationArchive;
 import com.yourmom.botrgchar.BotrGState;
 import com.yourmom.botrgchar.Element;
 import com.yourmom.screenassets.BotrGDialogue;
 import com.yourmom.screenassets.BotrGSceneBattle;
 import com.yourmom.screenassets.BotrGTextConvertor;
+
+import static com.yourmom.botrgchar.AttackAttribute.AttAttributeType.*;
 
 /**
  * Created by Ben on 23.07.2018.
@@ -34,6 +35,7 @@ public class BotrGEventAttack implements BotrGEvent {
     private boolean doesDmg = false;
     private int dmgDealt = 0;
     private boolean inflictsState = false;
+    private boolean inflictStateAllreadyActive = false;
     private boolean inflictsSelfState = false;
     private int inflictionStateIndex = 0;
     private boolean animActive = false;
@@ -50,10 +52,10 @@ public class BotrGEventAttack implements BotrGEvent {
         animActive = true;
 
         System.out.println("EVENT_ATTACK: Effective Attack Accuracy: " + (battleScene.getAttackingChar().getAccuracy() - battleScene.getAttackingChar().getAttacks()[attackSlot].getAccuracyMod()) * 100 + "%");
-        System.out.println("EVENT_ATTACK: Effective Evasiveness: " + (battleScene.getDefendingChar().getEvasiveness() - battleScene.getAttackingChar().getAttacks()[attackSlot].getEvaDifficulty())* 100 + "%");
+        //System.out.println("EVENT_ATTACK: Effective Evasiveness: " + (battleScene.getDefendingChar().getEvasiveness() - battleScene.getAttackingChar().getAttacks()[attackSlot].getEvaDifficulty())* 100 + "%");
 
         //missed?
-        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(Attack.BotrGAttackAttribute.ACCURACY_MOD)
+        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(ACCURACY_MOD)
                 && Math.random() > battleScene.getAttackingChar().getAccuracy() -
                     battleScene.getAttackingChar().getAttacks()[attackSlot].getAccuracyMod()){
             attackHit = false;
@@ -61,7 +63,7 @@ public class BotrGEventAttack implements BotrGEvent {
         }
 
         //dodged?
-        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(Attack.BotrGAttackAttribute.EVA_DIFFICULTY)
+        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(EVA_DIFFICULTY)
                 && Math.random() <= battleScene.getDefendingChar().getEvasiveness() -
                     battleScene.getAttackingChar().getAttacks()[attackSlot].getEvaDifficulty()){
             dodged = true;
@@ -69,14 +71,14 @@ public class BotrGEventAttack implements BotrGEvent {
         }
 
         //dmg?
-        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(Attack.BotrGAttackAttribute.DMG))
+        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(DMG))
             doesDmg = true;
 
         //inflict state?
-        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(Attack.BotrGAttackAttribute.INFLICT_STATE)) {
+        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(INFLICT_STATE)) {
             inflictsState = true;
             for(int i = 0; i < battleScene.getAttackingChar().getAttacks()[attackSlot].getAttributes().length; i++) {
-                if(battleScene.getAttackingChar().getAttacks()[attackSlot].getAttributes()[i] == Attack.BotrGAttackAttribute.INFLICT_STATE){
+                if(battleScene.getAttackingChar().getAttacks()[attackSlot].getAttributes()[i].getType() == INFLICT_STATE){
                     inflictionStateIndex = i;
                     break;
                 }
@@ -84,7 +86,7 @@ public class BotrGEventAttack implements BotrGEvent {
         }
 
         //inflict self state?
-        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(Attack.BotrGAttackAttribute.INFLICT_STATE_SELF))
+        if(battleScene.getAttackingChar().getAttacks()[attackSlot].hasAttribute(INFLICT_STATE_SELF))
             inflictsSelfState = true;
 
         //dmg mod:
@@ -237,17 +239,14 @@ public class BotrGEventAttack implements BotrGEvent {
                 eventStateChanging = false;
                 //set & start animation
                 animation = BotrGState.getStateInflictAnimation(battleScene,
-                        battleScene.getAttackingChar().getAttacks()[attackSlot].getAttributeState(Attack.BotrGAttackAttribute.INFLICT_STATE),
+                        battleScene.getAttackingChar().getAttacks()[attackSlot].getAttribute(INFLICT_STATE).getState(),
                         battleScene.getAttackingChar().checkIsPlayer());
                 animation.startAnimation(battleScene);
 
                 //add state
-                float[] stateValues = new float[battleScene.getAttackingChar().getAttacks()[attackSlot].getAttributeValues(Attack.BotrGAttackAttribute.INFLICT_STATE).length - 1];
-                System.arraycopy(battleScene.getAttackingChar().getAttacks()[attackSlot].getAttributeValues(Attack.BotrGAttackAttribute.INFLICT_STATE),
-                        1, stateValues, 0, stateValues.length);
-
-                battleScene.getDefendingChar().addState(battleScene.getAttackingChar().getAttacks()[attackSlot].getAttributeState(Attack.BotrGAttackAttribute.INFLICT_STATE),
-                        stateValues);
+                battleScene.getDefendingChar().addState(
+                        battleScene.getAttackingChar().getAttacks()[attackSlot].getAttribute(INFLICT_STATE).getState()
+                );
             }
             if(!animation.isActive()){
                 eventStateChanging = true;
@@ -261,7 +260,7 @@ public class BotrGEventAttack implements BotrGEvent {
                 dialogue = new BotrGDialogue(
                         BotrGTextConvertor.replaceTags(
                             BotrGState.getStateInflictionText(
-                                    battleScene.getAttackingChar().getAttacks()[attackSlot].getAttributeState(Attack.BotrGAttackAttribute.INFLICT_STATE),
+                                    battleScene.getAttackingChar().getAttacks()[attackSlot].getAttribute(INFLICT_STATE).getState(),
                                     false), battleScene));
 
                 dialogue.startDialogue();
@@ -276,7 +275,9 @@ public class BotrGEventAttack implements BotrGEvent {
         if(currentEventState == eventState.INFLICT_SELF_STATE){
             if(eventStateChanging){
                 eventStateChanging = false;
-                animation = BotrGState.getStateInflictAnimation(battleScene, BotrGState.getStateFromId(0), battleScene.getAttackingChar().checkIsPlayer());
+                animation = BotrGState.getStateInflictAnimation(battleScene,
+                        battleScene.getAttackingChar().getAttacks()[attackSlot].getAttribute(INFLICT_STATE_SELF).getState(),
+                        battleScene.getAttackingChar().checkIsPlayer());
                 animation.startAnimation(battleScene);
             }
             if(!animation.isActive()){
@@ -291,7 +292,6 @@ public class BotrGEventAttack implements BotrGEvent {
         if(animActive){
             dialogue.updateAnimation(battleScene);
             animText.updateAnimation(battleScene);
-            //arrow.updateAnimation(battleScene);
             animation.updateAnimation(battleScene);
         }
     }
