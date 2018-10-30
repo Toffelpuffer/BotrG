@@ -103,11 +103,11 @@ public class BotrGEventStateDmg implements BotrGEvent {
                         );
                 animation = BotrGState.getStateDmgAnimation( battleScene,
                         battleScene.getAttackingChar().getStates()[nextState],
-                        (int)battleScene.getAttackingChar().getStateValues()[nextState][1],
+                        (int)battleScene.getAttackingChar().getStates()[nextState].getValues()[1],
                         battleScene.getAttackingChar().checkIsPlayer() );
                 animation.setDelay(15);
                 battleScene.getAttackingChar().reduceHp(
-                        (int)battleScene.getAttackingChar().getStateValues()[nextState][1]);
+                        (int)battleScene.getAttackingChar().getStates()[nextState].getValues()[1]);
 
                 nextState++;
                 break;
