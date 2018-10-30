@@ -16,9 +16,6 @@ public class BotrGState{
         this.type = type;
         this.values = values;
     }
-
-        //TODO: State from enum into class and remove stateValues from char
-
         public BotrGStateType getType(){return type;}
         public float[] getValues(){return values;}
 
@@ -85,7 +82,7 @@ public class BotrGState{
                 BotrGSceneBattle battleScene, BotrGState state, int dmg, boolean harmedCharIsPlayer){
             switch(state.getType()){
                 default: return new AnimHit(battleScene, dmg, 0, harmedCharIsPlayer);
-                case POISON: return new AnimStatePoisonDmg(harmedCharIsPlayer);
+                case POISON: return new AnimStatePoisonDmg(battleScene, dmg, harmedCharIsPlayer);
             }
         }
 
