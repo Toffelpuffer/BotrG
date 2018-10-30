@@ -1,50 +1,50 @@
 package com.yourmom.botrgchar;
 
+import static com.yourmom.botrgchar.AttackAttribute.AttAttributeType.*;
+
 /**
  * Created by Ben on 11.07.2018.
  */
 
 public class Attack {
-    public enum BotrGAttackAttribute {
-        DMG, HEAL, ABSORB, INFLICT_STATE, INFLICT_STATE_SELF, ACCURACY_MOD, EVA_DIFFICULTY
-    }
+    //TODO: Make BotrGAttackAttribute its own class.
+
     private String displayName;
     private String splash;
     private String announcementAltText;
     private String midAttackText;
     private EleType[] eleTypes;
-    private BotrGAttackAttribute[] attributes;
-    private float[][] attrValues;
+    private AttackAttribute[] attributes;
     private int animationId;
 
 
     public Attack(String displayName, String splash, String announcement, String midAttackText, int animationId,
-                  BotrGAttackAttribute[] attributes, float[][] attrValues,
+                  AttackAttribute[] attributes,
                   EleType[] eleTypes){
 
-        setup(displayName, splash, announcement, midAttackText, animationId, attributes, attrValues,
+        setup(displayName, splash, announcement, midAttackText, animationId, attributes,
                 eleTypes);
     }
 
     public Attack(String displayName, String splash, String announcement, String midAttackText, int animationId,
-                  BotrGAttackAttribute[] attributes, float[][] attrValues,
+                  AttackAttribute[] attributes,
                   EleType eleType){
 
-        setup(displayName, splash, announcement, midAttackText, animationId, attributes, attrValues,
+        setup(displayName, splash, announcement, midAttackText, animationId, attributes,
                 new EleType[]{eleType});
     }
 
     public Attack(String displayName, String splash, String announcement, String midAttackText, int animationId,
-                  BotrGAttackAttribute attribute, float[] attrValue,
+                  AttackAttribute attribute,
                   EleType eleType){
 
         setup(displayName, splash, announcement, midAttackText, animationId,
-                new BotrGAttackAttribute[]{attribute}, new float[][]{attrValue},
+                new AttackAttribute[]{attribute},
                 new EleType[]{eleType});
     }
 
-    private void setup(String displayName, String splash, String announcement, String midAttackText,
-                       int animationId, BotrGAttackAttribute[] attributes, float[][] attrValues,
+    private void setup(String displayName, String splash, String announcement, String midAttackText, int animationId,
+                       AttackAttribute[] attributes,
                        EleType[] eleTypes){
 
         this.displayName = displayName;
@@ -53,7 +53,6 @@ public class Attack {
         this.midAttackText = midAttackText;
         this.animationId = animationId;
         this.attributes = attributes;
-        this.attrValues = attrValues;
         this.eleTypes = eleTypes;
     }
 
@@ -70,39 +69,33 @@ public class Attack {
         return splash;
     }
     public float getDmg(){
-        return getAttributeValues(BotrGAttackAttribute.DMG)[0];
+        return getAttribute(DMG).getValues()[0];
     }
     public float getAccuracyMod(){
-        return getAttributeValues(BotrGAttackAttribute.ACCURACY_MOD)[0];
+        return getAttribute(ACCURACY_MOD).getValues()[0];
     }
     public float getEvaDifficulty(){
-        return getAttributeValues(BotrGAttackAttribute.EVA_DIFFICULTY)[0];
+        if(hasAttribute(EVA_DIFFICULTY))
+            return getAttribute(EVA_DIFFICULTY).getValues()[0];
+        else return 0.0f;
     }
 
     public EleType[] getEleTypes() {return eleTypes;}
-    public BotrGAttackAttribute[] getAttributes(){return attributes;}
+    public AttackAttribute[] getAttributes(){return attributes;}
     public int getAnimationId() {return animationId;}
 
 
-    public boolean hasAttribute(BotrGAttackAttribute attribute){
-        for(BotrGAttackAttribute currentAttr: attributes){
-            if(currentAttr == attribute) return true;
+    public boolean hasAttribute(AttackAttribute.AttAttributeType attributeType){
+        for(AttackAttribute currentAttr: attributes){
+            if(currentAttr.getType() == attributeType) return true;
         }
         return false;
     }
 
-    public float[] getAttributeValues(BotrGAttackAttribute attribute){
-        for(int i = 0; i < attributes.length; i++)
-            if(attributes[i] == attribute) return attrValues[i];
-        return new float[]{0.0f};
-    }
-
-    public BotrGState getAttributeState(BotrGAttackAttribute attribute){
-        for(int i = 0; i < attributes.length; i++){
-            if(attributes[i] == attribute){
-                return BotrGState.getStateFromId((int)getAttributeValues(attributes[i])[0]);
-            }
+    public AttackAttribute getAttribute(AttackAttribute.AttAttributeType AttributeType){
+        for(AttackAttribute attAttribute : attributes){
+            if(attAttribute.getType() == AttributeType) return attAttribute;
         }
-        return BotrGState.NONE;
+        return new AttackAttribute(NONE, new float[]{});
     }
 }
